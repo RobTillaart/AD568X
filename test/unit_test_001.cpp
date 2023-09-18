@@ -90,10 +90,10 @@ unittest(get_setPercentage)
   AD5681R AD1R(8);
 
   AD1R.begin();
-  for (int p = 0; p < 100; p += 9)
+  for (float p = 0; p < 100; p += 9)
   {
     AD1R.setPercentage(p);
-    assertEqual(p, AD1R.getPercentage());
+    assertEqualFloat(p, AD1R.getPercentage(), 0.1);
   }
 }
 
