@@ -43,43 +43,58 @@ unittest(constant)
   assertEqual(0x01, AD568X_PWR_1K        );
   assertEqual(0x02, AD568X_PWR_100K      );
   assertEqual(0x03, AD568X_PWR_TRI_STATE );
-
-  assertEqual(0x00, AD568X_CC_0000 );
-  assertEqual(0x01, AD568X_CC_8000 );
-  assertEqual(0x02, AD568X_CC_FFFF );
-  assertEqual(0x03, AD568X_CC_NOP  );
 }
 
 
 unittest(constructors)
 {
-  AD5680 AD0(8);  //  12 bit  0..4096
+  AD5681R AD0(8);           //  12 bit  0..4096
+  AD5681R AD1(8, 9, 10);    //  12 bit  0..4096
 
   assertTrue(AD0.usesHWSPI());
+  assertFalse(AD1.usesHWSPI());
 }
 
 
 unittest(get_type)
 {
-  AD568X AD0(8);
+  AD568X  ADX(8);
+  AD5681R AD1R(8);
+  AD5682R AD2R(8);
+  AD5683  AD3(8);
+  AD5683R AD3R(8);
 
-  assertEqual(0, AD0.getType());
+  assertEqual(00, ADX.getType());
+  assertEqual(12, AD1R.getType());
+  assertEqual(14, AD2R.getType());
+  assertEqual(16, AD3.getType());
+  assertEqual(16, AD3R.getType());
 }
 
 
 unittest(get_setValue)
 {
-  AD5680 AD0(8);
+  AD5681R AD1R(8);
 
-  AD0.begin();
+  AD1R.begin();
+  for (int v = 0; v < 2000; v += 100)
+  {
+    AD1R.setValue(v);
+    assertEqual(v, AD1R.getValue());
+  }
 }
 
 
 unittest(get_setPercentage)
 {
-  AD5680 AD0(8);
+  AD5681R AD1R(8);
 
-  AD0.begin();
+  AD1R.begin();
+  for (int p = 0; p < 100; p += 9)
+  {
+    AD1R.setPercentage(p);
+    assertEqual(p, AD1R.getPercentage());
+  }
 }
 
 
