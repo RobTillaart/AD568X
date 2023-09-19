@@ -1,7 +1,7 @@
 //
 //    FILE: AD568X_demo.ino
 //  AUTHOR: Rob Tillaart
-// PUPROSE: test basic behavior and performance
+// PUPROSE: test basic behaviour and performance
 
 
 #include "AD568X.h"
@@ -33,8 +33,8 @@ void loop()
   uint32_t start = micros();
   for (int i = 0; i < 1000; i++)
   {
-    AD16_HW.setValue(i);
-    // AD16_SW.setValue(i);
+    // AD16_HW.setValue(i);
+     AD16_SW.setValue(i);
   }
   uint32_t stop = micros();
   Serial.println(stop - start);

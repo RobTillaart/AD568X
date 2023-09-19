@@ -1,4 +1,4 @@
-# Change Log AD56X8
+# Change Log AD568X
 
 All notable changes to this project will be documented in this file.
 
@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.1.0] - 2023-09-18
-- initial work
+- initial version
 
 
 

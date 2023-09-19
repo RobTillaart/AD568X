@@ -11,9 +11,12 @@
 
 # AD568X
 
-**Experimental**
-
 Arduino library for the AD568X series digital analog convertor.
+
+
+## Description
+
+**Experimental**
 
 - SPI interface  (AD569X series is I2C)
 
@@ -22,25 +25,23 @@ TODO buy hardware.
 TODO documentation.
 
 
-## Description
-
-
-|  Type      |  bits   |  supported  |  Notes  |
-|:----------:|:-------:|:-----------:|:--------|
-|  AD5680    |    18   |     N       | need separate class ?
-|  AD5681R   |    12   |     Y       |
-|  AD5682R   |    14   |     Y       |
-|  AD5683    |    16   |     Y       |
-|  AD5683R   |    16   |     Y       |
+|  Type     |  bits  |  supported  |  Notes  |
+|:---------:|:------:|:-----------:|:--------|
+|  AD5680   |   18   |     N       |  has separate class
+|  AD5681R  |   12   |     Y       |
+|  AD5682R  |   14   |     Y       |
+|  AD5683   |   16   |     Y       |
+|  AD5683R  |   16   |     Y       |
 
 
 Feedback, issues, improvements are welcome. 
 Please file an issue on GitHub.
 
 
-## Links
+## Related
 
 - https://github.com/RobTillaart/AD56x8 (multi channel)
+- https://github.com/RobTillaart/AD5680 (18 bit version)
 - https://github.com/RobTillaart/MCP_DAC (SPI interface)
 
 
@@ -68,7 +69,6 @@ Sets internal values to zero.
 The parameters for the specific constructors are identical to the base class.
 One should use these!
 
-- **AD5680(..)** constructor,  18 bit.  NOT IMPLEMENTED.
 - **AD5681R(..)** constructor, 12 bit.
 - **AD5682R(..)** constructor, 14 bit.
 - **AD5683R(..)** constructor, 16 bit.
@@ -92,14 +92,44 @@ Returns false if value out of range.
 
 ### Control Register
 
-TODO
+Check datasheet for details.
 
-|  mode  |  define            |
-|:------:|:-------------------|
-|  0x00  | AD568X_PWR_NORMAL  |
-|  0x01  | AD568X_PWR_1K      |
-|  0x02  | AD568X_PWR_100K    |
-|  0x03  | AD568X_PWR_TRI     |
+- **bool setControlRegister(uint16_t value)** set register in one call.
+- **uint16_t getControlRegister()** return the set / current value.
+- **bool reset()** reset the AD568X device.
+Also resets all flags in control register.
+- **bool setPowerDownMode(uint8_t mode = AD568X_PWR_NORMAL)** 
+set one of three power down modes, see table below, or to normal mode.
+Default is AD568X_PWR_NORMAL.
+- **bool disableReference(bool b)** false = reference enabled.
+true = reference disabled (uses less power). 
+Default is enabled.
+- **bool enableGain(bool enable = false)** false = 0..Vref  true = 0..2x Vref.
+Default is false.
+- **bool enableDaisyChain(bool enable = false)** enables daisy chain mode.
+**WARNING** Daisy Chain is not supported in current library.
+Default is false.
+
+Control register bits: (see datasheet)
+
+|  bits  |  meaning             |  Notes  |
+|:------:|:---------------------|:--------|
+|   15   |  RESET               |
+|   14   |  PowerDown 1         |
+|   13   |  PowerDown 2         |
+|   12   |  REFerence selection |
+|   11   |  GAIN                |
+|   10   |  DCEN, Daisy Chain   |  not supported in the library.
+
+
+Power down modi: (see datasheet)
+
+|  mode  |  define             |
+|:------:|:--------------------|
+|  0x00  |  AD568X_PWR_NORMAL  |
+|  0x01  |  AD568X_PWR_1K      |
+|  0x02  |  AD568X_PWR_100K    |
+|  0x03  |  AD568X_PWR_TRI     |
 
 
 
@@ -134,8 +164,6 @@ The SW pulses are a bit slower than the HW pulses and therefore more square.
 The HW-SPI has some overhead SW-SPI hasn't. 
 
 
-
-
 ## Future
 
 #### Must
@@ -146,19 +174,12 @@ The HW-SPI has some overhead SW-SPI hasn't.
 - support for LDAC pin
   - void **setLDACPin(uint8_t pin)**
   - void **triggerLDAC()**
-- implement better control register code
-  - RESET
-  - Power Down modes
-  - GAIN bit
-  - Daisy Chain support
 
 
 #### Should
 
 - write examples
   - performance
-- investigate derived class for AD5680
-- check TODO in code
 
 
 #### Could

@@ -141,13 +141,65 @@ bool AD568X::updateValue()
 }
 
 
+//////////////////////////////////////////////////////////////////
+//
+//  CONTROL REGISTER
+//
 bool AD568X::setControlRegister(uint16_t value)
 {
-  updateDevice(AD568X_REG_CONTROL, value);
+  _controlReg = value & 0xFC00;
+  updateDevice(AD568X_REG_CONTROL, _controlReg);
   return true;
 }
 
 
+bool AD568X::reset()
+{
+  _controlReg |= (1 << 15);  //  set RESET bit
+  updateDevice(AD568X_REG_CONTROL, _controlReg);
+  _controlReg = 0x0000;
+  return true;
+}
+
+
+bool AD568X::setPowerDownMode(uint8_t mode)
+{
+  if (mode > 3) return false;
+  _controlReg &= 0x9C00;  //  clear PD bits
+  _controlReg |= (mode << 13);
+  updateDevice(AD568X_REG_CONTROL, _controlReg);
+  return true;
+}
+
+
+bool AD568X::disableReference(bool b)
+{
+  _controlReg &= 0xEC00;  //  clear REF bit
+  if (b) _controlReg |= (1 << 12);
+  updateDevice(AD568X_REG_CONTROL, _controlReg);
+  return true;
+}
+
+
+bool AD568X::enableGain(bool enable)
+{
+  _controlReg &= 0xF400;  //  clear GAIN bit
+  if (enable) _controlReg |= (1 << 11);
+  updateDevice(AD568X_REG_CONTROL, _controlReg);
+  return true;
+}
+
+
+bool AD568X::enableDaisyChain(bool enable)
+{
+  _controlReg &= 0xF800;  //  clear DCEN bit
+  if (enable) _controlReg |= (1 << 10);
+  updateDevice(AD568X_REG_CONTROL, _controlReg);
+  return true;
+}
+
+
+//////////////////////////////////////////////////////////////////
 //
 //  SPI
 //

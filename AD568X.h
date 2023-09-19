@@ -51,7 +51,15 @@ public:
   //   11     GAIN
   //   10     DCEN, Daisy Chain ENable
   //  other   0
+  //  set register in one call.
   bool     setControlRegister(uint16_t value);
+  uint16_t getControlRegister();
+
+  bool     reset();
+  bool     setPowerDownMode(uint8_t mode = AD568X_PWR_NORMAL);
+  bool     disableReference(bool b);
+  bool     enableGain(bool enable = false);
+  bool     enableDaisyChain(bool enable = false);
 
 
   //  SPI
@@ -78,8 +86,8 @@ protected:
   uint8_t  _clock       = 255;
   uint8_t  _select      = 255;
 
-  uint16_t _value;
-  uint8_t  _ldacMask    = 0;
+  uint16_t _value       = 0;
+  uint16_t _controlReg  = 0;
 
   bool     _hwSPI       = false;
   uint32_t _SPIspeed    = 16000000;

@@ -1,6 +1,6 @@
 {
   "name": "AD568X",
-  "keywords": "AD5680, AD5681R, AD5682R, AD5683, AD5683R, DAC, SPI",
+  "keywords": "AD5681R, AD5682R, AD5683, AD5683R, DAC, SPI",
   "description": "Arduino library for AD568X series Digital Analog Convertor.",
   "authors":
   [
