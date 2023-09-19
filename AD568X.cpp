@@ -85,16 +85,17 @@ uint8_t AD568X::getType()
 void AD568X::setLDACPin(uint8_t ldac)
 {
   _ldac = ldac;
-  pinMode(ldac, OUTPUT);
-  digitalWrite(ldac, HIGH);
+  pinMode(_ldac, OUTPUT);
+  digitalWrite(_ldac, HIGH);
 }
 
 
 bool AD568X::triggerLDAC()
 {
   if (_ldac == 255) return false;
-  digitalWrite(ldac, LOW);
-  digitalWrite(ldac, HIGH);
+  digitalWrite(_ldac, LOW);
+  digitalWrite(_ldac, HIGH);
+  return true;
 }
 
 
