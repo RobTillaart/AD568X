@@ -28,6 +28,9 @@ public:
   void     begin();
   uint8_t  getType();
 
+  //  optional LDAC interface
+  void     setLDACPin(uint8_t ldac);
+  bool     triggerLDAC();  //  return false if pin not set.
 
   //  SET DAC
   //  sets output immediately = prepare + update.
@@ -85,6 +88,7 @@ protected:
   uint8_t  _dataOut     = 255;
   uint8_t  _clock       = 255;
   uint8_t  _select      = 255;
+  uint8_t  _ldac        = 255;
 
   uint16_t _value       = 0;
   uint16_t _controlReg  = 0;

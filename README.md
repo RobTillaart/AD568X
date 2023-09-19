@@ -18,21 +18,28 @@ Arduino library for the AD568X series digital analog convertor.
 
 **Experimental**
 
-- SPI interface  (AD569X series is I2C)
-
-Note: not yet tested, 
-TODO buy hardware.
-TODO documentation.
-
+The AD568X library implements a base class and four derived classes.
+The derived classed only differ on the resolution set. 
 
 |  Type     |  bits  |  supported  |  Notes  |
 |:---------:|:------:|:-----------:|:--------|
-|  AD5680   |   18   |     N       |  has separate class
 |  AD5681R  |   12   |     Y       |
 |  AD5682R  |   14   |     Y       |
 |  AD5683   |   16   |     Y       |
 |  AD5683R  |   16   |     Y       |
 
+The AD568X uses SPI to communicate to the device and supports both
+hardware SPI as software SPI (bit bang).
+
+The library is not tested with hardware yet so it is labelled as 
+**experimental** and should be used with care.
+
+Although the library has a function to set the Daisy Chain ENable bit,
+the library does not support this mode. 
+It is added for completeness and possibly to be used in the future.
+So for now the library only supports stand alone mode. 
+
+Note: the AD5691, AD5692, AD5693 are equivalent devices with I2C (no library yet).
 
 Feedback, issues, improvements are welcome. 
 Please file an issue on GitHub.
@@ -40,7 +47,7 @@ Please file an issue on GitHub.
 
 ## Related
 
-- https://github.com/RobTillaart/AD56x8 (multi channel)
+- https://github.com/RobTillaart/AD56x8 (multi channel DAC's)
 - https://github.com/RobTillaart/AD5680 (18 bit version)
 - https://github.com/RobTillaart/MCP_DAC (SPI interface)
 
@@ -67,12 +74,24 @@ Sets internal values to zero.
 #### Derived classes (preferred use)
 
 The parameters for the specific constructors are identical to the base class.
-One should use these!
+One should use these, as these set the bit resolution!
 
 - **AD5681R(..)** constructor, 12 bit.
 - **AD5682R(..)** constructor, 14 bit.
 - **AD5683R(..)** constructor, 16 bit.
 - **AD5683(..)** constructor,  16 bit.
+
+
+### LDAC
+
+The use of the LDAC interface is optional.
+It allows a prepared value to be set in in the DAC register.
+See **prepareValue()**.
+If you control multiple devices the hardware LDAC allows you to 
+set a new value on all devices simultaneously.
+
+- void **setLDACPin(uint8_t ldac)** set the LDAC pin.
+- void **triggerLDAC()** give a pulse over the LDAC line.
 
 
 ### Set DAC
@@ -88,6 +107,7 @@ At power up the DAC's will be reset to 0 Volt.
 Returns false if value out of range.
 - **bool updateValue()** writes the prepared value to ADC.
 Returns false if value out of range.
+This function is also known as the software LDAC.
 
 
 ### Control Register
@@ -132,8 +152,6 @@ Power down modi: (see datasheet)
 |  0x03  |  AD568X_PWR_TRI     |
 
 
-
-
 #### SPI 
 
 - **void setSPIspeed(uint32_t speed)** sets SPI clock in **Hz**,
@@ -169,17 +187,19 @@ The HW-SPI has some overhead SW-SPI hasn't.
 #### Must
 
 - improve documentation
-- get test hardware
+- get hardware for testing
 - test the library
-- support for LDAC pin
-  - void **setLDACPin(uint8_t pin)**
-  - void **triggerLDAC()**
 
 
 #### Should
 
 - write examples
   - performance
+  - LDAC pin
+  - multi device ( array)
+  - multi device (LDAC sync)
+- Clean up / improve code.
+  - move conditional code to variable. (setValue etc).
 
 
 #### Could
@@ -197,6 +217,4 @@ Improve the quality of the libraries by providing issues and Pull Requests, or
 donate through PayPal or GitHub sponsors.
 
 Thank you,
-
-
 
